@@ -1,0 +1,38 @@
+{
+  "codex-1m-compact-hooks": {
+    "enabled": true,
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "node scripts/hook-runner.mjs SessionStart",
+        "timeout": 10
+      }
+    ],
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "node scripts/hook-runner.mjs PreInvocation",
+        "timeout": 15
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hook-runner.mjs PostToolUse",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": "node scripts/hook-runner.mjs Stop",
+        "timeout": 10
+      }
+    ]
+  }
+}

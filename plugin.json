@@ -1,0 +1,14 @@
+{
+  "name": "codex-1m-compact",
+  "displayName": "Codex 1M Compact",
+  "version": "1.0.1",
+  "description": "Unlocks a 1M effective context window for Antigravity with OpenAI Codex-aligned checkpoint compaction, anti-amnesia recovery shield, FTS5 1M recall, and live Aux-Pane context gauge.",
+  "author": "zhjbddd",
+  "repository": "https://github.com/zhjbddd/codex-1m-compact",
+  "logo": "assets/logo.svg",
+  "suggestedPrompts": [
+    "Use /codex-compact to compact the current conversation context",
+    "Check my 1M context window status and cache hit rate",
+    "Configure auto-compaction threshold to 900K on a 1M context window"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "command": "node",
+  "args": ["main.mjs"],
+  "restart_policy": "always",
+  "display_name": "Codex 1M Compact",
+  "description": "Codex-aligned 1M context window gauge, anti-amnesia shield, FTS5 recall, and one-click context compaction.",
+  "has_web_ui": true,
+  "agent_permissions": {
+    "allows_user_interactions": false
+  },
+  "ui_config": {
+    "display_name": "Codex 1M Compact",
+    "views": [
+      {
+        "path": "/",
+        "entrypoint": "SIDECAR_UI_ENTRYPOINT_AUX_PANE",
+        "title": "1M Context"
+      }
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "codex_1m_dashboard",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Codex 1M Context & Compaction dashboard sidecar"
+}

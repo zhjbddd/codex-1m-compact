@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="codexRing" x1="20" y1="20" x2="108" y2="108" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+    <linearGradient id="badgeBg" x1="28" y1="28" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+  </defs>
+  <!-- 10%+ margin: artwork stays inside [14, 114] -->
+  <circle cx="64" cy="64" r="46" fill="url(#badgeBg)" />
+  <circle cx="64" cy="64" r="46" stroke="rgba(148,163,184,0.28)" stroke-width="6" />
+  <!-- 90% Codex auto-compact progress arc -->
+  <circle
+    cx="64"
+    cy="64"
+    r="46"
+    stroke="url(#codexRing)"
+    stroke-width="6"
+    stroke-linecap="round"
+    stroke-dasharray="260 29"
+    transform="rotate(-90 64 64)"
+  />
+  <!-- Compaction chevron arrows -->
+  <path d="M40 38L47 45L40 52" stroke="#34D399" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M88 38L81 45L88 52" stroke="#22D3EE" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- Bold 1M label -->
+  <text
+    x="64"
+    y="74"
+    text-anchor="middle"
+    fill="#F8FAFC"
+    font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
+    font-size="27"
+    font-weight="800"
+    letter-spacing="-0.5"
+  >1M</text>
+  <rect x="44" y="83" width="40" height="4.5" rx="2.25" fill="url(#codexRing)" />
+</svg>

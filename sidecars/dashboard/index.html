@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Codex 1M Context</title>
+  <script src="/preload.js"></script>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="dot" id="health-dot"></span>
+        <div>
+          <h1>Codex 1M Compact</h1>
+          <div class="subtitle" id="conv-label">Loading conversation…</div>
+        </div>
+      </div>
+      <button id="refresh-btn" class="icon-btn" title="Refresh status">↻</button>
+    </header>
+
+    <section class="hero-card">
+      <div class="ring-wrap">
+        <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+          <circle class="ring-track" cx="60" cy="60" r="50" />
+          <circle class="ring-threshold" id="ring-threshold" cx="60" cy="60" r="50" />
+          <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="50" />
+        </svg>
+        <div class="ring-center">
+          <div class="pct-left" id="pct-left">--%</div>
+          <div class="pct-caption">context left</div>
+        </div>
+      </div>
+
+      <div class="hero-metrics">
+        <div class="metric-row">
+          <span class="metric-label">1M Session</span>
+          <span class="metric-value" id="session-tokens">-- / 1.0M</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill" id="session-bar"></div>
+          <div class="bar-marker" id="threshold-marker" title="Auto-compact threshold"></div>
+        </div>
+
+        <div class="metric-row">
+          <span class="metric-label">Active API Window</span>
+          <span class="metric-value" id="active-tokens">--</span>
+        </div>
+        <div class="bar-track bar-track-sm">
+          <div class="bar-fill bar-fill-api" id="api-bar"></div>
+        </div>
+
+        <div class="pills">
+          <span class="pill" id="cache-pill">Cache --%</span>
+          <span class="pill" id="shield-pill">Shield 0 drops</span>
+          <span class="pill" id="cp-pill">Checkpoints 0</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="compact-studio">
+      <label class="field-label" for="focus-input">Compaction Focus (optional, like <code>/compact &lt;focus&gt;</code>)</label>
+      <input id="focus-input" class="text-input" type="text" placeholder="e.g. Preserve auth schema constraints & pending tests">
+      <div class="action-row">
+        <button id="btn-compact-inplace" class="btn btn-primary">Compact In-Place</button>
+        <button id="btn-compact-handoff" class="btn btn-secondary">Compact &amp; New Session</button>
+      </div>
+      <div id="action-feedback" class="feedback hidden"></div>
+    </section>
+
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="overview">Overview</button>
+      <button class="tab" data-tab="search">1M Recall</button>
+      <button class="tab" data-tab="policy">Policy</button>
+    </nav>
+
+    <section id="tab-overview" class="tab-panel active">
+      <div class="card">
+        <h2>Token Breakdown (Active Segment)</h2>
+        <div class="kv-grid">
+          <div><span>User Prompts</span><strong id="cat-user">--</strong></div>
+          <div><span>Model Output</span><strong id="cat-model">--</strong></div>
+          <div><span>Tools &amp; Files</span><strong id="cat-tools">--</strong></div>
+          <div><span>Handoff Anchor</span><strong id="cat-handoff">--</strong></div>
+          <div><span>Total 1M Vault</span><strong id="vault-total">--</strong></div>
+          <div><span>Bridged Drops</span><strong id="bridged-total">--</strong></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Codex Checkpoints</h2>
+        <div id="checkpoints-list" class="list-empty">No checkpoints yet. Auto-compacts at 900K (or click Compact above).</div>
+      </div>
+    </section>
+
+    <section id="tab-search" class="tab-panel">
+      <div class="card">
+        <h2>Full-Text 1M Ledger Recall (FTS5)</h2>
+        <div class="search-row">
+          <input id="search-input" class="text-input" type="text" placeholder="Search untruncated prompts, file paths, errors…">
+          <button id="search-btn" class="btn btn-primary btn-sm">Search</button>
+        </div>
+        <div id="search-results" class="search-results">Enter keywords to search across all indexed turns.</div>
+      </div>
+    </section>
+
+    <section id="tab-policy" class="tab-panel">
+      <div class="card policy-form">
+        <h2>1M Window &amp; Codex Policy</h2>
+
+        <label class="field-label">Window Preset</label>
+        <div class="preset-row">
+          <button class="preset-btn" data-window="200000">200K</button>
+          <button class="preset-btn" data-window="400000">400K</button>
+          <button class="preset-btn" data-window="1000000">1.0M</button>
+          <button class="preset-btn" data-window="1048576">1MiB</button>
+          <button class="preset-btn" data-window="2000000">2.0M</button>
+        </div>
+
+        <label class="field-label" for="cfg-threshold-pct">
+          Auto-Compact Threshold: <strong id="cfg-threshold-label">90% (900K)</strong>
+        </label>
+        <input id="cfg-threshold-pct" type="range" min="50" max="95" step="1" value="90">
+
+        <label class="field-label" for="cfg-user-budget">Preserved User Messages Budget (Codex default 20K)</label>
+        <input id="cfg-user-budget" class="text-input" type="number" min="2000" max="100000" step="1000" value="20000">
+
+        <label class="field-label" for="cfg-hud-mode">Inline Chat HUD Mode</label>
+        <select id="cfg-hud-mode" class="text-input">
+          <option value="milestones">Milestones (every 10% + compactions)</option>
+          <option value="always">Always (every turn)</option>
+          <option value="warnings_only">Warnings Only (&le;20% left + compactions)</option>
+          <option value="off">Off (Sidecar only)</option>
+        </select>
+
+        <label class="toggle-row">
+          <input id="cfg-auto-compact" type="checkbox" checked>
+          <span>Auto-compact when hitting threshold</span>
+        </label>
+
+        <label class="toggle-row">
+          <input id="cfg-anti-amnesia" type="checkbox" checked>
+          <span>1M Anti-Amnesia Shield (bridge early backend truncation)</span>
+        </label>
+
+        <button id="cfg-save" class="btn btn-primary">Save Policy</button>
+        <div id="cfg-feedback" class="feedback hidden"></div>
+      </div>
+    </section>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
