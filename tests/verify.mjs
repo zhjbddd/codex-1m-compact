@@ -4,10 +4,10 @@ import { appendFileSync, existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSy
 import { homedir, tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { CODEX_SUMMARY_PREFIX } from '../lib/compactor.mjs';
-import { searchLedger, syncConversationLedger } from '../lib/ledger.mjs';
+import { CODEX_SUMMARY_PREFIX, collectUserMessages } from '../lib/compactor.mjs';
+import { openLedgerDb, searchLedger, syncConversationLedger } from '../lib/ledger.mjs';
 import { findLatestConversationId } from '../lib/paths.mjs';
-import { cleanUserMessage } from '../lib/transcript.mjs';
+import { cleanUserMessage, formatModelDisplay } from '../lib/transcript.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PLUGIN_ROOT = resolve(__dirname, '..');
@@ -122,6 +122,12 @@ try {
     cleanUserMessage('<USER_REQUEST>\nhello world\n</USER_REQUEST>\n<ADDITIONAL_METADATA>\nmeta\n</ADDITIONAL_METADATA>'),
     'hello world',
   );
+  assert.equal(cleanUserMessage('[plan review] Please summarize current progress.'), '');
+  assert.equal(cleanUserMessage('<USER_REQUEST>\n[plan review due]\n</USER_REQUEST>'), '');
+  assert.equal(cleanUserMessage('<EPHEMERAL_MESSAGE>Internal reminder</EPHEMERAL_MESSAGE>'), '');
+  assert.equal(formatModelDisplay('gemini-4-neon-high'), 'Gemini 4 Neon (High)');
+  assert.equal(formatModelDisplay('MODEL_PLACEHOLDER_M537'), 'Orchestrator (Neon)');
+  assert.equal(formatModelDisplay('MODEL_PLACEHOLDER_M402'), 'Claude Opus 5.5 (High)');
 
   const s1 = syncConversationLedger({
     conversationId: convId,
@@ -188,12 +194,20 @@ try {
         step_index: 5,
         source: 'MODEL',
         type: 'PLANNER_RESPONSE',
+        model: 'gemini-4-neon-high',
         created_at: '2026-11-18T00:02:20Z',
         input_tokens: 280000,
         cache_read_tokens: 500000,
         output_tokens: 900,
         content: 'Updated auth integration tests and validated token expiry.',
         tool_calls: [{ name: 'edit_file', args: { Path: '"e:\\project\\tests\\auth.test.ts"' } }],
+      }),
+      makeStepLine({
+        step_index: 6,
+        source: 'USER_EXPLICIT',
+        type: 'USER_INPUT',
+        created_at: '2026-11-18T00:02:25Z',
+        content: '[plan review] Internal hand-back turn that must be ignored.',
       }),
     ].join(''),
     'utf-8',
@@ -221,8 +235,16 @@ try {
     appDataDir,
   });
   assert.equal(s3.status.checkpointCount, 1);
+  assert.equal(s3.status.activeModel, 'Gemini 4 Neon (High)');
   assert.ok(s3.status.session1mTokens < 25000, `Expected reset <25K, got ${s3.status.session1mTokens}`);
   assert.ok(s3.status.percentLeft > 97, `Expected >97% left, got ${s3.status.percentLeft}`);
+  const dbCheck = openLedgerDb(convId, dataDir);
+  try {
+    const collected = collectUserMessages(dbCheck, 20000, -1);
+    assert.equal(collected.some((m) => m.text.includes('[plan review]')), false);
+  } finally {
+    dbCheck.close();
+  }
   console.log(`   PASS: Auto-compacted at 905K -> reset to ${s3.status.session1mTokens} tokens (${s3.status.percentLeft.toFixed(1)}% left).`);
 
   console.log('4. Testing FTS5 1M History Recall...');

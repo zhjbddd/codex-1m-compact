@@ -92,3 +92,11 @@ node tests/verify.mjs
 ```
 
 测试套件完整覆盖：增量日志解析与真实 API Token 核算、早期后端截断防失忆盾（160K → 35K）、900K 自动触发 Codex Checkpoint 压缩、FTS5 1M 历史全文召回、Stdio MCP Server 端到端 JSON-RPC 通信，以及对真实本地对话日志的只读冒烟测试。
+
+---
+
+## 六、v1.1.0 更新日志（Antigravity `2.35.0` 适配与双语面板）
+
+- **Plan/Execute 内部标记过滤**：自动忽略 Antigravity `2.35.0` 注入的 `[plan review]`、`[plan review due]` 与 `<EPHEMERAL_MESSAGE>`，防止内部调度消息污染 `Preserved User Messages` 或挤占 20K 用户约束预算。
+- **实时活跃模型追踪**：在账本与 Sidecar 顶部状态栏中解析并展示当前会话模型（支持 `Gemini 4 Neon`、`Orchestrator (Neon)`、`Claude Opus/Sonnet 5.5` 等 `2.35.0` 新模型及占位符）。
+- **简体中文 / English 双语面板**：Sidecar 仪表盘默认跟随中文系统环境显示全中文界面，右上角提供 `EN / 中文` 一键切换按钮。

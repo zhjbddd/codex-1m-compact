@@ -1,7 +1,7 @@
 {
   "name": "codex-1m-compact",
   "displayName": "Codex 1M Compact",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Unlocks a 1M effective context window for Antigravity with OpenAI Codex-aligned checkpoint compaction, anti-amnesia recovery shield, FTS5 1M recall, and live Aux-Pane context gauge.",
   "author": "zhjbddd",
   "repository": "https://github.com/zhjbddd/codex-1m-compact",

@@ -14,7 +14,7 @@ import { formatTokens } from '../lib/transcript.mjs';
 const PROTOCOL_VERSION = '2024-11-05';
 const SERVER_INFO = {
   name: 'codex-1m-compact',
-  version: '1.0.0',
+  version: '1.1.0',
 };
 
 function parseCliArgs(argv) {

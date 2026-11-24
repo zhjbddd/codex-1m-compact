@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,10 +14,13 @@
         <span class="dot" id="health-dot"></span>
         <div>
           <h1>Codex 1M Compact</h1>
-          <div class="subtitle" id="conv-label">Loading conversation…</div>
+          <div class="subtitle" id="conv-label">正在加载会话…</div>
         </div>
       </div>
-      <button id="refresh-btn" class="icon-btn" title="Refresh status">↻</button>
+      <div class="topbar-actions">
+        <button id="lang-btn" class="lang-btn" title="切换中英文 / Switch Language">EN</button>
+        <button id="refresh-btn" class="icon-btn" title="刷新状态">↻</button>
+      </div>
     </header>
 
     <section class="hero-card">
@@ -29,22 +32,22 @@
         </svg>
         <div class="ring-center">
           <div class="pct-left" id="pct-left">--%</div>
-          <div class="pct-caption">context left</div>
+          <div class="pct-caption" data-i18n="pctCaption">剩余上下文</div>
         </div>
       </div>
 
       <div class="hero-metrics">
         <div class="metric-row">
-          <span class="metric-label">1M Session</span>
+          <span class="metric-label" data-i18n="session1mLabel">1M 会话占用</span>
           <span class="metric-value" id="session-tokens">-- / 1.0M</span>
         </div>
         <div class="bar-track">
           <div class="bar-fill" id="session-bar"></div>
-          <div class="bar-marker" id="threshold-marker" title="Auto-compact threshold"></div>
+          <div class="bar-marker" id="threshold-marker" title="自动压缩阈值"></div>
         </div>
 
         <div class="metric-row">
-          <span class="metric-label">Active API Window</span>
+          <span class="metric-label" data-i18n="activeApiLabel">当前活跃窗口</span>
           <span class="metric-value" id="active-tokens">--</span>
         </div>
         <div class="bar-track bar-track-sm">
@@ -52,64 +55,64 @@
         </div>
 
         <div class="pills">
-          <span class="pill" id="cache-pill">Cache --%</span>
-          <span class="pill" id="shield-pill">Shield 0 drops</span>
-          <span class="pill" id="cp-pill">Checkpoints 0</span>
+          <span class="pill" id="cache-pill">缓存 --%</span>
+          <span class="pill" id="shield-pill">防失忆 0 次</span>
+          <span class="pill" id="cp-pill">检查点 0</span>
         </div>
       </div>
     </section>
 
     <section class="compact-studio">
-      <label class="field-label" for="focus-input">Compaction Focus (optional, like <code>/compact &lt;focus&gt;</code>)</label>
-      <input id="focus-input" class="text-input" type="text" placeholder="e.g. Preserve auth schema constraints & pending tests">
+      <label class="field-label" for="focus-input" data-i18n-html="focusLabel">压缩聚焦重点（可选，类似 <code>/compact &lt;focus&gt;</code>）</label>
+      <input id="focus-input" class="text-input" type="text" data-i18n-placeholder="focusPlaceholder" placeholder="例如：保留鉴权结构约束与待修测试">
       <div class="action-row">
-        <button id="btn-compact-inplace" class="btn btn-primary">Compact In-Place</button>
-        <button id="btn-compact-handoff" class="btn btn-secondary">Compact &amp; New Session</button>
+        <button id="btn-compact-inplace" class="btn btn-primary" data-i18n="btnCompactInPlace">就地压缩</button>
+        <button id="btn-compact-handoff" class="btn btn-secondary" data-i18n="btnCompactHandoff">压缩并新建会话</button>
       </div>
       <div id="action-feedback" class="feedback hidden"></div>
     </section>
 
     <nav class="tabs" role="tablist">
-      <button class="tab active" data-tab="overview">Overview</button>
-      <button class="tab" data-tab="search">1M Recall</button>
-      <button class="tab" data-tab="policy">Policy</button>
+      <button class="tab active" data-tab="overview" data-i18n="tabOverview">概览</button>
+      <button class="tab" data-tab="search" data-i18n="tabSearch">1M 检索</button>
+      <button class="tab" data-tab="policy" data-i18n="tabPolicy">策略</button>
     </nav>
 
     <section id="tab-overview" class="tab-panel active">
       <div class="card">
-        <h2>Token Breakdown (Active Segment)</h2>
+        <h2 data-i18n="breakdownTitle">Token 构成（当前分段）</h2>
         <div class="kv-grid">
-          <div><span>User Prompts</span><strong id="cat-user">--</strong></div>
-          <div><span>Model Output</span><strong id="cat-model">--</strong></div>
-          <div><span>Tools &amp; Files</span><strong id="cat-tools">--</strong></div>
-          <div><span>Handoff Anchor</span><strong id="cat-handoff">--</strong></div>
-          <div><span>Total 1M Vault</span><strong id="vault-total">--</strong></div>
-          <div><span>Bridged Drops</span><strong id="bridged-total">--</strong></div>
+          <div><span data-i18n="catUser">用户提问</span><strong id="cat-user">--</strong></div>
+          <div><span data-i18n="catModel">模型输出</span><strong id="cat-model">--</strong></div>
+          <div><span data-i18n="catTools">工具与文件</span><strong id="cat-tools">--</strong></div>
+          <div><span data-i18n="catHandoff">交接锚点</span><strong id="cat-handoff">--</strong></div>
+          <div><span data-i18n="vaultTotal">1M 历史总库</span><strong id="vault-total">--</strong></div>
+          <div><span data-i18n="bridgedTotal">已桥接截断</span><strong id="bridged-total">--</strong></div>
         </div>
       </div>
 
       <div class="card">
-        <h2>Codex Checkpoints</h2>
-        <div id="checkpoints-list" class="list-empty">No checkpoints yet. Auto-compacts at 900K (or click Compact above).</div>
+        <h2 data-i18n="checkpointsTitle">Codex 检查点</h2>
+        <div id="checkpoints-list" class="list-empty" data-i18n="noCheckpoints">暂无检查点。达到阈值时将自动压缩，也可点击上方手动压缩。</div>
       </div>
     </section>
 
     <section id="tab-search" class="tab-panel">
       <div class="card">
-        <h2>Full-Text 1M Ledger Recall (FTS5)</h2>
+        <h2 data-i18n="recallTitle">全文 1M 历史检索（FTS5）</h2>
         <div class="search-row">
-          <input id="search-input" class="text-input" type="text" placeholder="Search untruncated prompts, file paths, errors…">
-          <button id="search-btn" class="btn btn-primary btn-sm">Search</button>
+          <input id="search-input" class="text-input" type="text" data-i18n-placeholder="searchPlaceholder" placeholder="搜索未截断的提问、文件路径或报错…">
+          <button id="search-btn" class="btn btn-primary btn-sm" data-i18n="btnSearch">搜索</button>
         </div>
-        <div id="search-results" class="search-results">Enter keywords to search across all indexed turns.</div>
+        <div id="search-results" class="search-results" data-i18n="searchHint">输入关键词以检索所有已索引的历史步骤。</div>
       </div>
     </section>
 
     <section id="tab-policy" class="tab-panel">
       <div class="card policy-form">
-        <h2>1M Window &amp; Codex Policy</h2>
+        <h2 data-i18n="policyTitle">1M 窗口与 Codex 策略</h2>
 
-        <label class="field-label">Window Preset</label>
+        <label class="field-label" data-i18n="windowPreset">窗口预设</label>
         <div class="preset-row">
           <button class="preset-btn" data-window="200000">200K</button>
           <button class="preset-btn" data-window="400000">400K</button>
@@ -119,32 +122,32 @@
         </div>
 
         <label class="field-label" for="cfg-threshold-pct">
-          Auto-Compact Threshold: <strong id="cfg-threshold-label">90% (900K)</strong>
+          <span data-i18n="thresholdPrefix">自动压缩阈值：</span><strong id="cfg-threshold-label">90% (900K)</strong>
         </label>
         <input id="cfg-threshold-pct" type="range" min="50" max="95" step="1" value="90">
 
-        <label class="field-label" for="cfg-user-budget">Preserved User Messages Budget (Codex default 20K)</label>
+        <label class="field-label" for="cfg-user-budget" data-i18n="userBudgetLabel">保留用户消息预算（Codex 默认 20K）</label>
         <input id="cfg-user-budget" class="text-input" type="number" min="2000" max="100000" step="1000" value="20000">
 
-        <label class="field-label" for="cfg-hud-mode">Inline Chat HUD Mode</label>
+        <label class="field-label" for="cfg-hud-mode" data-i18n="hudModeLabel">对话内联 HUD 模式</label>
         <select id="cfg-hud-mode" class="text-input">
-          <option value="milestones">Milestones (every 10% + compactions)</option>
-          <option value="always">Always (every turn)</option>
-          <option value="warnings_only">Warnings Only (&le;20% left + compactions)</option>
-          <option value="off">Off (Sidecar only)</option>
+          <option value="milestones" data-i18n="hudMilestones">里程碑（每 10% 与压缩时）</option>
+          <option value="always" data-i18n="hudAlways">始终显示（每轮对话）</option>
+          <option value="warnings_only" data-i18n="hudWarnings">仅预警（剩余 ≤20% 与压缩时）</option>
+          <option value="off" data-i18n="hudOff">关闭（仅侧边栏）</option>
         </select>
 
         <label class="toggle-row">
           <input id="cfg-auto-compact" type="checkbox" checked>
-          <span>Auto-compact when hitting threshold</span>
+          <span data-i18n="toggleAutoCompact">达到阈值时自动压缩</span>
         </label>
 
         <label class="toggle-row">
           <input id="cfg-anti-amnesia" type="checkbox" checked>
-          <span>1M Anti-Amnesia Shield (bridge early backend truncation)</span>
+          <span data-i18n="toggleAntiAmnesia">1M 防失忆护盾（桥接后端提前截断）</span>
         </label>
 
-        <button id="cfg-save" class="btn btn-primary">Save Policy</button>
+        <button id="cfg-save" class="btn btn-primary" data-i18n="btnSavePolicy">保存策略</button>
         <div id="cfg-feedback" class="feedback hidden"></div>
       </div>
     </section>

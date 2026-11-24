@@ -73,15 +73,32 @@ body {
 .dot.warn { background: var(--warn); box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.22); }
 .dot.danger { background: var(--danger); box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.22); }
 
-.icon-btn {
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.icon-btn,
+.lang-btn {
   border: 1px solid var(--border);
   background: var(--card);
   color: var(--fg);
   border-radius: 6px;
-  width: 28px;
   height: 28px;
   cursor: pointer;
+}
+
+.icon-btn {
+  width: 28px;
   font-size: 14px;
+}
+
+.lang-btn {
+  padding: 0 8px;
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .hero-card,
